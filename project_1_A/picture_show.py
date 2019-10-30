@@ -8,16 +8,18 @@ def show(img, name):
     if key == 27:
         cv2.destroyAllWindows()
 
+
 # 原图显示
-def Or_show():
-    name = 'woman'
-    img = Pic().pic_c()
-    show(img, name)
+def Or_show(path):
+    g_pic = Pic(path)
+    img = g_pic.pic_c()
+    show(img, 'Original')
+
 
 #图像读取函数
 class Pic(object):
-    def __init__(self):
-        self.path = 'woman.jpg'
+    def __init__(self, path):
+        self.path = path
 
     def pic_c(self):
         img_c = cv2.imread(self.path, 1)
