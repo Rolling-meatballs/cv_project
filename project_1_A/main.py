@@ -17,7 +17,7 @@ def test():
     cv2.imshow("output", merge_image)
     if cv2.waitKey() == 27:
         cv2.destroyAllWindows()
-    cv2.imwrite(" C://CV//image/lenna_merge.jpg ", merge_image)
+    cv2.imwrite(" lenna_merge.jpg ", merge_image)
     log("\n=============>Output saved!")
 
 
