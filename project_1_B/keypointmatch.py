@@ -41,12 +41,21 @@ class FindKeyPointsAndMatch(object):
 
             #求解特征矩阵
 
-            homo_matrix, _ = cv2.findHomography(matched_kp1, matched_kp2, cv2.RANSAC, 4)
+            homo_matrix, mask = cv2.findHomography(matched_kp1, matched_kp2, cv2.RANSAC, 4)
             log('homo_matrix', homo_matrix)
-            return homo_matrix
+            return homo_matrix, mask
         else:
             return None
 
+class picture_operation(object):
+    def __init__(self):
+        pass
+
+    def find_corner(self, mask):
+        high, wide = img1.shape
+
+        corner_point = np.float32([[0, 0], [0, high - 1], [wide - 1, high - 1], [wide - 1, 0]]).reshape(-1, 1, 2)
+        cg_corner_point = cv2.perspectiveTransform(corner_point, mask)
 
 # class PasteTwoImages(object):
 #     def __init__(self):

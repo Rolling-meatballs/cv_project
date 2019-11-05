@@ -4,7 +4,7 @@ import keypointmatch
 from out_put import log
 
 
-def test():
+def mian():
     imname_1 = 'IMG_2411.jpg'
     imname_2 = 'IMG_2412.jpg'
     image1 = cv2.imread(imname_1)
@@ -22,5 +22,5 @@ def test():
 
 
 if __name__ == '__main__':
-    test()
+    mian()
     # pass
