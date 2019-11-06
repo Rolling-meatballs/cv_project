@@ -20,9 +20,10 @@ class FindKeyPointsAndMatch(object):
 
     #关键点匹配
     def match(self, kp1,kp2):
-        matches = self.brute.knnMatch(kp1["des"], kp2["des"], k = 2)
-        good_matches = []
+        matches = self.brute.knnMatch(kp1["des"], kp2["des"], k=2)
 
+        #去除错误匹配
+        good_matches = []
         for i ,(m,n) in enumerate(matches):
             if m.distance < 0.7 * n.distance:
                 good_matches.append((m.trainIdx, m.queryIdx))
@@ -43,19 +44,47 @@ class FindKeyPointsAndMatch(object):
 
             homo_matrix, mask = cv2.findHomography(matched_kp1, matched_kp2, cv2.RANSAC, 4)
             log('homo_matrix', homo_matrix)
-            return homo_matrix, mask
+            return homo_matrix, mask, good_matches
         else:
             return None
 
 class picture_operation(object):
-    def __init__(self):
-        pass
 
-    def find_corner(self, mask):
-        high, wide = img1.shape
+    def __init__(self, img1, img2):
+        self.img1 = img1
+        self.img2 = img2
+        self.frame = None
 
+    def find_frame(self, homo_matrix):
+
+        high, wide, _ = self.img1.shape
+        # log('_', _)
+        # log('high', high)
+        # log('wide', wide)
         corner_point = np.float32([[0, 0], [0, high - 1], [wide - 1, high - 1], [wide - 1, 0]]).reshape(-1, 1, 2)
-        cg_corner_point = cv2.perspectiveTransform(corner_point, mask)
+        # corner_point = np.float32([[0, 0], [0, high - 1], [wide - 1, high - 1], [wide - 1, 0]])
+        cg_corner_point = cv2.perspectiveTransform(corner_point, homo_matrix)
+
+        frame = cv2.polylines(self.img2, [np.int32(cg_corner_point)], True, (255, 0, 0), 10, cv2.LINE_AA)
+
+        return frame
+
+    def picture_show(self, kp1, kp2, mask, good, frame):
+        log('mask',mask)
+        log('good', good)
+        matches = mask.ravel().tolist()
+        log('matches', matches)
+        draw_params = dict(matchColor=(0, 0, 255), #draw matches in Red color
+                           singlePointColor=None,
+                           # matchesMask=None,  #draw only inliers
+                           matchesMask=matches,  #draw only inliers
+                           flags=2,
+                           )
+
+        img3 = cv2.drawMatches(self.img1, kp1, frame, kp2, good, None, **draw_params)
+        log('img3', img3)
+        return img3
+
 
 # class PasteTwoImages(object):
 #     def __init__(self):
