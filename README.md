@@ -10,3 +10,11 @@ a online place for every group member finishes cv project from KKB.
 
 ## 免责申明
 1. 本项目所用的素材均用做练习，谢绝将本项目内的任何资源用作任何的商业目的
+
+
+## 项目说明
+### project_1_A
+实现了两张图片的融合
+
+### project_1_B
+实现了对于目标的查找和选择
